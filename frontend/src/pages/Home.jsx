@@ -1,8 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
-  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
 
   return (
     <div className="container text-center mt-5">
@@ -10,9 +9,9 @@ export default function Home() {
       <p className="lead mb-4">
         Your fast and reliable solution for parcel delivery and order management.
       </p>
-      <button className="btn btn-primary btn-lg px-4" onClick={() => navigate('/login')}>
-        Login
-      </button>
+      {!token && (
+        <p className="text-muted">Please log in to access your dashboard.</p>
+      )}
     </div>
   );
 }
