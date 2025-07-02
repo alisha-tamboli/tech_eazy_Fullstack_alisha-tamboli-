@@ -1,0 +1,13 @@
+# Auto detect text files and ensure correct line endings
+* text=auto
+
+# Treat JS, JSON, CSS, and HTML as UTF-8
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+
+# Mark backend as Node, frontend as React (helps GitHub language stats)
+backend/* linguist-language=JavaScript
+frontend/* linguist-language=JavaScript

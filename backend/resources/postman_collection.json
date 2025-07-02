@@ -1,0 +1,92 @@
+{
+  "info": {
+    "_postman_id": "f4a38562-60c0-47a5-bdc5-example1234",
+    "name": "Zero Mile Delivery System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "http://localhost:5000/api/login", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "login"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"vendor\",\n  \"password\": \"pass123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Add Vendor",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "http://localhost:5000/api/vendors", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "vendors"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Myntra\",\n  \"subscription\": \"PRIME\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get Vendors",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "http://localhost:5000/api/vendors?page=1", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "vendors"], "query": [{ "key": "page", "value": "1" }] }
+      }
+    },
+    {
+      "name": "Upload Delivery Order File",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "vendorId", "value": "1", "type": "text" },
+            { "key": "orderDate", "value": "2025-07-02", "type": "text" },
+            { "key": "file", "type": "file", "src": "/absolute/path/to/sample-parcels.txt" }
+          ]
+        },
+        "url": { "raw": "http://localhost:5000/api/delivery-orders/upload", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "delivery-orders", "upload"] }
+      }
+    },
+    {
+      "name": "Get Delivery Orders (filtered)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "http://localhost:5000/api/delivery-orders?vendorId=1&date=2025-07-02",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "delivery-orders"],
+          "query": [
+            { "key": "vendorId", "value": "1" },
+            { "key": "date", "value": "2025-07-02" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Today Parcel Summary",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "http://localhost:5000/api/parcels/today-summary",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["api", "parcels", "today-summary"]
+        }
+      }
+    }
+  ]
+}

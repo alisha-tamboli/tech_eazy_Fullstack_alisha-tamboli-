@@ -1,0 +1,144 @@
+Verify Color on Invalid Drop:
+
+Ensure that when a card is incorrectly dropped in the wrong swimlane, it doesn't take the wrong color. The color should reset to its initial state (lightgrey for Backlog, etc.) if dropped incorrectly. 
+
+also do this Check the Reordering Within Swimlanes:
+
+Ensure that cards within the same swimlane can be reordered properly (the drag-and-drop functionality should handle both reorder and move-to-another swimlane correctly)., what does this means
+
+
+
+import React, { Component } from 'react';
+import Card from './Card';
+import dragula from 'dragula'; // Import Dragula for drag-and-drop functionality
+import 'dragula/dist/dragula.css'; // Dragula styles
+import './Swimlane.css';
+
+export default class Swimlane extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      clients: props.clients || [],  
+    };
+  }
+
+  componentDidMount() {
+
+    const containers = Array.from(document.querySelectorAll('.Swimlane-dragColumn'));
+
+    dragula(containers)
+      .on('drag', (el) => {
+        const originalColor = el.style.backgroundColor;
+        el.dataset.originalColor = originalColor; // Store the original color in the dataset
+        el.style.transition = 'background-color 0.3s ease'; // Smooth color transition during drag
+        el.style.backgroundColor = 'lightgrey'; // Light grey during drag
+        el.style.color = 'black'; // Ensure text is readable during drag
+      })
+
+      .on('drop', (el, target) => {
+        this.handleDrop(el, target);
+      })
+
+      .on('cancel', (el) => {
+        el.style.backgroundColor = el.dataset.originalColor || 'lightgrey'; // Default to original color
+        el.style.color = 'black'; // Reset text color
+      });
+  }
+
+  handleDrop = (el, target) => {
+    const swimlaneName = target.parentElement.querySelector('.Swimlane-title').textContent;
+    const draggedClientId = el.id;
+    const draggedClient = this.state.clients.find(client => client.id === draggedClientId);
+  
+    if (!draggedClient) return;
+  
+    // Verify the swimlane corresponds to the card's status
+    const validSwimlane =
+      swimlaneName === 'Backlog' ||
+      swimlaneName === 'In Progress' ||
+      swimlaneName === 'Complete';
+  
+    if (!validSwimlane) {
+      // Invalid drop: Reset color to original status
+      el.style.backgroundColor =
+        draggedClient.status === 'backlog'
+          ? 'rgba(167, 158, 158, 0.671)' // Gray
+          : draggedClient.status === 'in-progress'
+          ? 'skyblue' // Blue
+          : 'rgb(150, 190, 150)'; // Green
+      el.style.color = draggedClient.status === 'backlog' ? 'black' : 'white';
+      return;
+    }
+  
+    // Update the client's status based on the swimlane
+    const newStatus =
+      swimlaneName === 'Backlog'
+        ? 'backlog'
+        : swimlaneName === 'In Progress'
+        ? 'in-progress'
+        : 'complete';
+  
+    draggedClient.status = newStatus;
+
+
+    // Update the state and reorder clients
+    this.setState(
+      prevState => {
+        const updatedClients = prevState.clients.map(client =>
+          client.id === draggedClientId ? { ...client, status: newStatus } : client
+        );
+  
+        // Reorder clients based on the DOM structure
+        const reorderedClients = Array.from(target.parentElement.children).map(child => {
+          return updatedClients.find(client => client.id === child.id);
+        });
+  
+        return { clients: reorderedClients };
+      },
+      () => {
+        // Update the card's color based on the new status
+        el.style.backgroundColor =
+          draggedClient.status === 'backlog'
+            ? 'rgba(167, 158, 158, 0.671)' // Gray
+            : draggedClient.status === 'in-progress'
+            ? 'skyblue' // Blue
+            : 'rgb(150, 190, 150)'; // Green
+        el.style.color = draggedClient.status === 'backlog' ? 'black' : 'white';
+      }
+    );
+  };
+
+
+  render() {
+    if (!Array.isArray(this.state.clients)) {
+      console.error('clients is not an array');
+      return null;
+    }
+
+    const cards = this.state.clients.map(client => {
+      if (!client) {
+        console.error('Client object is undefined');
+        return null; 
+      }
+
+      return (
+        <Card
+          key={client.id}
+          id={client.id}
+          name={client.name}
+          description={client.description}
+          status={client.status}
+        />
+      );
+    });
+
+    return (
+      <div className="Swimlane-column">
+        <div className="Swimlane-title">{this.props.name}</div>
+        <div className="Swimlane-dragColumn" ref={this.props.dragulaRef}>
+          {cards}
+        </div>
+      </div>
+    );
+  }
+}
