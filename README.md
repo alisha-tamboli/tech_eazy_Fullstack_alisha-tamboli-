@@ -1,4 +1,11 @@
 📁 Project Name: delivery-order-system
+A full-stack parcel delivery dashboard for vendors, built with **Node.js**, **SQLite**, and **React**.
+
+
+# Login credentials
+username: vendor
+password: pass123
+
 
 delivery-order-system/
 ├── backend/         ← Node + Express + SQLite
@@ -15,7 +22,7 @@ delivery-order-system/
 - JWT for authentication
 - Multer for file upload
 
-How to create backebd structure-
+# How to create backebd structure-
 - mkdir backend
 - cd backend
 - npm init -y
@@ -34,6 +41,8 @@ backend/
 └── README.md
 
 ------
+
+
 # FRONTEND – Delivery Order System
 
 ## 📦 Tech Stack
@@ -46,22 +55,21 @@ backend/
 📤 File upload for Delivery Orders
 📋 Order list view with filters
 
-Frontend - 
+# How to create Frontend - 
 - npx create-react-app frontend
 - cd frontend
 - npm install axios react-router-dom bootstrap
 
 
-How to run
-Start backend-  	node server.js (or use nodemon) (inside backend/)
-Start frontend-	    npm start (inside frontend/)
+# How to run the website
+- To sart backend-  node server.js(inside backend/)
+- Runs at: http://localhost:5000
+
+
+- To start frontend-  npm start (inside frontend/)
+- Runs at: http://localhost:3000
 
 ----------
-
-
-Login credentials
-username: vendor
-password: pass123
 
 folder structure-
 
@@ -76,8 +84,8 @@ delivery-order-system/
 │ ├── db/parcel.db ← SQLite database
 │ ├── routes/ ← Express routers
 │ ├── uploads/ ← Store uploaded files (optional)
-│ ├── postman_collection.json
-│ └── README.md
+│ ├── resources/ postman_collection.json
+│ 
 │
 ├── frontend/ ← React App
 │ ├── public/
@@ -89,3 +97,8 @@ delivery-order-system/
 │ │ └── api.js ← Axios API config
 |
 |── README.md
+
+
+
+Prepared by: Alisha Tamboli
+GitHub: github.com/alisha-tamboli
